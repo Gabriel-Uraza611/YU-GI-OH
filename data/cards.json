@@ -1,0 +1,96 @@
+[ 
+    { 
+        "name": "Dancing Elf",
+        "number": 395,
+        "type": "Fairy",
+        "attack": 300,
+        "defense": 200,
+        "level": 1
+    },
+
+    { 
+        "name": "Boo Koo",
+        "number": 486,
+        "type": "Spellcaster",
+        "attack": 650,
+        "defense": 500,
+        "level": 2
+    },
+
+    { 
+        "name": "Battle Ox",
+        "number": 26,
+        "type": "Beast-Warrior",
+        "attack": 1700,
+        "defense": 1000,
+        "level": 4
+    },
+    
+    { 
+        "name": "Orion the Battle King",
+        "number": 126,
+        "type": "Fairy",
+        "attack": 1800,
+        "defense": 1500,
+        "level": 5
+    },
+
+    { 
+        "name": "Petit Dragon",
+        "number": 200,
+        "type": "Dragon",
+        "attack": 600,
+        "defense": 700,
+        "level": 2
+    },
+
+    
+    { 
+        "name": "Dark Prisoner",
+        "number": 173,
+        "type": "Fiend",
+        "attack": 600,
+        "defense": 1000,
+        "level": 3
+    },
+
+    
+    { 
+        "name": "Lesser Dragon",
+        "number": 561,
+        "type": "Dragon",
+        "attack": 1200,
+        "defense": 1000,
+        "level": 4
+    },
+
+    
+    {    
+        "name": "D. Human",
+        "number": 502,
+        "type": "Warrior",
+        "attack": 1300,
+        "defense": 1100,
+        "level": 4
+    },
+
+    
+    { 
+        "name": "Hinotama Soul",
+        "number": 210,
+        "type": "Pyro",
+        "attack": 600,
+        "defense": 500,
+        "level": 2
+    },
+
+    
+    {    
+        "name": "Sonic Maid",
+        "number": 299,
+        "type": "Warrior",
+        "attack": 1200,
+        "defense": 900,
+        "level": 3 
+    }
+]
