@@ -8,7 +8,7 @@ class Card:
     Clase que representa una carta con sus atributos.
     '''
 
-    def __init__(self, name:str, number:str, category:str, attack:int, defense:int, level:int):
+    def __init__(self, name:str, number:str, attack:int, defense:int):
 
         """
         Args:
@@ -22,17 +22,14 @@ class Card:
 
         self.name = name
         self.number = number
-        self.category = category
         self.attack = attack
         self.defense = defense
-        self.level = level
 
     def __repr__(self):
 
         return (
             f"Card(name: {self.name}, number: {self.number}, "
-            f"category: {self.category}, ATK: {self.attack}, "
-            f"DEF: {self.defense}, lv: {self.level})"
+            f"ATK: {self.attack}, DEF: {self.defense})"
         )
 
     def __str__(self):
@@ -41,9 +38,8 @@ class Card:
             f"║ {self.name:^20} ║\n"
             f"╠══════════════════════╣\n"
             f"║ #{self.number:<18} ║\n"
-            f"║ {self.category:<20} ║\n"
             f"╠══════════════════════╣\n"
-            f"║ ATK: {self.attack:<6} DEF: {self.defense:<4} ║\n"
-            f"║ Lv: {self.level:<17} ║\n"
+            f"║ ATK: {self.attack:<6} ║\n"
+            f"║ DEF: {self.defense:<6} ║\n" 
             f"╚══════════════════════╝"
         )

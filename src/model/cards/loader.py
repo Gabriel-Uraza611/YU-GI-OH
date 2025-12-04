@@ -40,10 +40,8 @@ def load_cards(filepath: str)-> dict:
             card = Card(
                 name=card_data['name'],
                 number=card_data['number'],
-                category=card_data['category'],
                 attack=card_data['attack'],
                 defense=card_data['defense'],
-                level=card_data.get('level')
             )
 
             # Usar el número de carta como clave (o crear un ID si es necesario)

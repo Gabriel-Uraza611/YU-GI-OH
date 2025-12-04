@@ -6,7 +6,7 @@
   },
   {
     "material_1_id": "040",
-    "material_2_id": "138",
+    "material_2_id": "126",
     "result_id": "004"
   },
   {
@@ -26,7 +26,7 @@
   },
   {
     "material_1_id": "210",
-    "material_2_id": "165",
+    "material_2_id": "127",
     "result_id": "015"
   },
   {
@@ -123,80 +123,5 @@
     "material_1_id": "353",
     "material_2_id": "146",
     "result_id": "097"
-  },
-  {
-    "material_1_id": "095",
-    "material_2_id": "345",
-    "result_id": "098"
-  },
-  {
-    "material_1_id": "351",
-    "material_2_id": "238",
-    "result_id": "099"
-  },
-  {
-    "material_1_id": "009",
-    "material_2_id": "192",
-    "result_id": "100"
-  },
-  {
-    "material_1_id": "486",
-    "material_2_id": "300",
-    "result_id": "117"
-  },
-  {
-    "material_1_id": "120",
-    "material_2_id": "166",
-    "result_id": "132"
-  },
-  {
-    "material_1_id": "242",
-    "material_2_id": "280",
-    "result_id": "133"
-  },
-  {
-    "material_1_id": "061",
-    "material_2_id": "144",
-    "result_id": "136"
-  },
-  {
-    "material_1_id": "296",
-    "material_2_id": "226",
-    "result_id": "138"
-  },
-  {
-    "material_1_id": "387",
-    "material_2_id": "179",
-    "result_id": "149"
-  },
-  {
-    "material_1_id": "242",
-    "material_2_id": "203",
-    "result_id": "154"
-  },
-  {
-    "material_1_id": "040",
-    "material_2_id": "274",
-    "result_id": "157"
-  },
-  {
-    "material_1_id": "175",
-    "material_2_id": "684",
-    "result_id": "162"
-  },
-  {
-    "material_1_id": "393",
-    "material_2_id": "686",
-    "result_id": "168"
-  },
-  {
-    "material_1_id": "402",
-    "material_2_id": "681",
-    "result_id": "171"
-  },
-  {
-    "material_1_id": "177",
-    "material_2_id": "481",
-    "result_id": "193"
   }
 ]
