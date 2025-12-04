@@ -16,7 +16,7 @@ def random_deck(all_cards: dict) -> np.ndarray:
         list: Lista con las cartas seleccionadas para el mazo
     '''
 
-    deck_size = 40
+    deck_size = 30
     card_array = np.array(list(all_cards.values()))
     deck = np.random.choice(
         a=card_array,        # Población (el array de todas las cartas)

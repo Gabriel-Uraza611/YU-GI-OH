@@ -8,7 +8,7 @@ class Card:
     Clase que representa una carta con sus atributos.
     '''
 
-    def __init__(self, name:str, number:int, category:str, attack:int, defense:int, level:int):
+    def __init__(self, name:str, number:str, category:str, attack:int, defense:int, level:int):
 
         """
         Args:
