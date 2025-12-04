@@ -6,7 +6,7 @@ JSON y convertirlos en instancias de la clase Card, facilitando la gestión
 de mazos y colecciones de cartas en juegos de cartas coleccionables.
 '''
 import json
-from    .card import Card
+from .card import Card
 
 
 def load_cards(filepath: str)-> dict:
