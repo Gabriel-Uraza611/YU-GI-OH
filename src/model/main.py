@@ -3,21 +3,21 @@ import random
 from typing import Dict, List, Any, Tuple
 
 # Carga de Cartas y Recetas
-from model.cards.card import Card
-from model.cards.card_loader import load_cards
-from model.cards.deck import random_deck 
-from model.fusions.fusion_recipe import FusionRecipe
-from model.fusions.recipe_loader import load_recipes
+from cards.card import Card
+from cards.card_loader import load_cards
+from cards.deck import random_deck 
+from fusions.fusion_recipe import FusionRecipe
+from fusions.recipe_loader import load_recipes
 
 # Clases del Juego
-from model.game.gamestate import GameState
-from model.game.player import Player
-from model.game.hand import Hand
-from model.game.field import Field
-from model.game.move import Move, ActionType, Position
+from game.gamestate import GameState
+from game.player import Player
+from game.hand import Hand
+from game.field import Field
+from game.move import Move, ActionType
 
 # Lógica de la IA
-from model.ai.ai_controller import AIController # Se asume que este archivo existe.
+from ai.ai_controller import AIController # Se asume que este archivo existe.
 
 # CONTROLADOR: Iniciaremos el juego a través del controlador de Pygame
 from controller.game_controller import GameController

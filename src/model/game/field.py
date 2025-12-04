@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple
-from model.cards.card import Card
-from model.game.move import Position
+from cards.card import Card
+from game.move import Position
 from dataclasses import dataclass, replace
 
 @dataclass(frozen=True)

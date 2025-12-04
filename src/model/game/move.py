@@ -3,7 +3,7 @@ from enum import Enum, auto
 from typing import Optional, Tuple, List
 
 # --- Importaciones de dependencias ---
-from model.cards.card import Card 
+from cards.card import Card 
 # Importamos solo el alias si la función es necesaria fuera de GameState
 # Pero dado que GameState la importa directamente, la quitamos de aquí para evitar confusiones
 # La función get_fusion_result está correctamente definida en model.fusions.fusion_recipe

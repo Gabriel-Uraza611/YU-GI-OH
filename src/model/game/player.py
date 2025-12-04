@@ -1,7 +1,7 @@
 from typing import List, Tuple, Optional
-from model.cards.card import Card
-from model.game.hand import Hand
-from model.game.field import Field 
+from cards.card import Card
+from .hand import Hand
+from .field import Field 
 from dataclasses import dataclass, replace, field
 
 @dataclass(frozen=True)

@@ -1,5 +1,5 @@
 from typing import List, Tuple, Optional
-from model.cards.card import Card
+from cards.card import Card
 from dataclasses import dataclass, replace, field
 
 @dataclass(frozen=True)
