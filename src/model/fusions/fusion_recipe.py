@@ -2,7 +2,7 @@
 Este modulo define la estructura y funcionalidad para manejar recetas de fusión entre cartas.
 '''
 
-from cards.card import Card
+from model.cards.card import Card
 
 class FusionRecipe:
     """Define la estructura de una receta de fusión."""

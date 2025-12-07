@@ -7,8 +7,8 @@ from model.cards.card import Card
 from model.game.move import Position
 
 # --- Dimensiones y Colores ---
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+SCREEN_WIDTH = 1336
+SCREEN_HEIGHT = 768
 CARD_WIDTH = 90
 CARD_HEIGHT = 130
 SLOT_SIZE = 100
@@ -26,11 +26,17 @@ class GameView:
         pygame.font.init()
         self.font_small = pygame.font.SysFont('Arial', 14)
         self.font_lp = pygame.font.SysFont('Arial', 24, bold=True)
+        self.round_number = 1  # Número de ronda actual
         
-    def draw_game(self, game_state: GameState):
+    def draw_game(self, game_state: GameState, round_number: int = 1):
         """
         Dibuja todos los componentes del juego en base al GameState actual.
+        
+        Args:
+            game_state: El estado actual del juego
+            round_number: El número de ronda actual
         """
+        self.round_number = round_number
         self.screen.fill(COLOR_BG)
         
         # 1. Dibujar el campo de juego central (compartido)
@@ -119,20 +125,29 @@ class GameView:
         pygame.draw.rect(self.screen, (200, 200, 200), rect, border_radius=5)
         
         # 2. Nombre
-        name_surface = self.font_small.render(card.name, True, (0, 0, 0))
-        text_rect = name_surface.get_rect(center=(rect.centerx, rect.y + 10))
+        name_surface = self.font_small.render(card.name[:15], True, (0, 0, 0))
+        text_rect = name_surface.get_rect(center=(rect.centerx, rect.y + 5))
         self.screen.blit(name_surface, text_rect)
         
+        # 2.5 Estrellas
+        stars_text = self.font_small.render(f"★{card.stars}", True, (255, 215, 0))
+        stars_rect = stars_text.get_rect(topleft=(rect.x + 3, rect.y + 15))
+        self.screen.blit(stars_text, stars_rect)
+        
         # 3. Stats (en un rectángulo central simulando imagen/arte)
-        stat_rect = pygame.Rect(rect.x + 5, rect.y + 20, rect.width - 10, rect.height - 40)
+        stat_rect = pygame.Rect(rect.x + 5, rect.y + 28, rect.width - 10, rect.height - 50)
         pygame.draw.rect(self.screen, (100, 100, 100), stat_rect)
         
         # 4. ATK/DEF en la parte inferior
-        stat_text = self.font_small.render(f"ATK:{card.attack}/DEF:{card.defense}", True, (255, 255, 255))
-        stat_text_rect = stat_text.get_rect(center=(rect.centerx, rect.bottom - 10))
+        stat_text = self.font_small.render(f"ATK:{card.attack}", True, (255, 255, 255))
+        stat_text_rect = stat_text.get_rect(center=(rect.centerx, rect.bottom - 15))
         self.screen.blit(stat_text, stat_text_rect)
         
-        # Si está rotada, solo para simular la rotación visualmente (Pygame real manejaría la rotación del Surface)
+        def_text = self.font_small.render(f"DEF:{card.defense}", True, (255, 255, 255))
+        def_text_rect = def_text.get_rect(center=(rect.centerx, rect.bottom - 5))
+        self.screen.blit(def_text, def_text_rect)
+        
+        # Si está rotada, mostrar indicador visual
         if is_rotated:
              pygame.draw.line(self.screen, (255, 0, 0), rect.topleft, rect.bottomright, 2)
              
@@ -167,13 +182,18 @@ class GameView:
         pygame.draw.rect(self.screen, (220, 220, 220), rect, border_radius=5)
         
         # 2. Nombre
-        name_surface = self.font_small.render(card.name, True, (0, 0, 0))
-        text_rect = name_surface.get_rect(center=(rect.centerx, rect.y + 10))
+        name_surface = self.font_small.render(card.name[:12], True, (0, 0, 0))
+        text_rect = name_surface.get_rect(center=(rect.centerx, rect.y + 8))
         self.screen.blit(name_surface, text_rect)
         
+        # 2.5 Estrellas
+        stars_text = self.font_small.render(f"★{card.stars}", True, (255, 215, 0))
+        stars_rect = stars_text.get_rect(topleft=(rect.x + 2, rect.y + 20))
+        self.screen.blit(stars_text, stars_rect)
+        
         # 3. Stats
-        stat_text = self.font_small.render(f"{card.attack}/{card.defense}", True, (50, 50, 50))
-        stat_text_rect = stat_text.get_rect(center=(rect.centerx, rect.bottom - 10))
+        stat_text = self.font_small.render(f"A:{card.attack} D:{card.defense}", True, (50, 50, 50))
+        stat_text_rect = stat_text.get_rect(center=(rect.centerx, rect.bottom - 8))
         self.screen.blit(stat_text, stat_text_rect)
 
     def _draw_info_panel(self, game_state: GameState):
@@ -186,13 +206,18 @@ class GameView:
         text_surface = self.font_lp.render(turn_text, True, color)
         self.screen.blit(text_surface, (SCREEN_WIDTH // 2 - text_surface.get_width() // 2, 5))
         
+        # Indicador de Ronda
+        round_text = f"Ronda: {self.round_number}"
+        round_surface = self.font_small.render(round_text, True, (200, 255, 200))
+        self.screen.blit(round_surface, (20, 5))
+        
         # Mensaje del juego (Placeholder, debería venir del Controller)
         message = f"Fase: {game_state.phase.upper()}"
         message_surface = self.font_small.render(message, True, (200, 200, 200))
         self.screen.blit(message_surface, (SCREEN_WIDTH // 2 - message_surface.get_width() // 2, 35))
         
-        # Botón de "Pass/End Phase"
-        self.pass_button_rect = pygame.Rect(SCREEN_WIDTH - 150, SCREEN_HEIGHT // 2 - 25, 120, 50)
+        # Botón de "Pass/End Phase" en la esquina inferior izquierda
+        self.pass_button_rect = pygame.Rect(20, SCREEN_HEIGHT - 60, 120, 50)
         pygame.draw.rect(self.screen, (0, 150, 0), self.pass_button_rect, border_radius=10)
         button_text = self.font_lp.render("PASS", True, (255, 255, 255))
         self.screen.blit(button_text, button_text.get_rect(center=self.pass_button_rect.center))
@@ -200,4 +225,42 @@ class GameView:
     def get_pass_button_rect(self) -> pygame.Rect:
         """Devuelve el rectángulo del botón PASS para la detección de clics."""
         # Se asume que este método es llamado DESPUÉS de _draw_info_panel
-        return self.pass_button_rect
+        return getattr(self, 'pass_button_rect', pygame.Rect(0, 0, 0, 0))
+    
+    def get_hand_card_rects(self, hand_cards, is_player: bool):
+        """
+        Devuelve una lista de rectángulos para cada carta en la mano.
+        Permite detectar clics en cartas de la mano.
+        """
+        rects = []
+        hand_y = (SCREEN_HEIGHT // 2) + 20 if is_player else (SCREEN_HEIGHT // 2) - CARD_HEIGHT - 20
+        
+        # Distribuir cartas horizontalmente
+        total_width = len(hand_cards) * (CARD_WIDTH + 10)
+        start_x = (SCREEN_WIDTH - total_width) // 2
+        
+        for i in range(len(hand_cards)):
+            x = start_x + i * (CARD_WIDTH + 10)
+            rect = pygame.Rect(x, hand_y, CARD_WIDTH, CARD_HEIGHT)
+            rects.append(rect)
+        
+        return rects
+    
+    def get_field_card_rects(self, field, is_player: bool):
+        """
+        Devuelve una lista de rectángulos para cada slot de monstruo.
+        Permite detectar clics en cartas del campo.
+        """
+        rects = []
+        field_y = (SCREEN_HEIGHT // 2) + 20 if is_player else (SCREEN_HEIGHT // 2) - SLOT_SIZE - 20
+        
+        # Distribuir slots horizontalmente
+        total_width = 5 * SLOT_SIZE + 4 * SLOT_PADDING
+        start_x = (SCREEN_WIDTH - total_width) // 2
+        
+        for i in range(5):  # 5 slots de monstruo
+            x = start_x + i * (SLOT_SIZE + SLOT_PADDING)
+            rect = pygame.Rect(x, field_y, SLOT_SIZE, SLOT_SIZE)
+            rects.append(rect)
+        
+        return rects

@@ -2,8 +2,8 @@ from dataclasses import dataclass, field, replace
 from typing import List, Dict, Optional, Tuple
 
 # Importaciones de los componentes modulares
-from cards.card import Card
-from fusions.fusion_recipe import FusionRecipe, get_fusion_result
+from model.cards.card import Card
+from model.fusions.fusion_recipe import FusionRecipe, get_fusion_result
 from .player import Player
 from .move import Move, ActionType, Position
 
@@ -290,16 +290,38 @@ class GameState:
                 if move.target_index is None or move.source_index is None or not acting_p.can_normal_summon: return self
                 
                 card_to_place = acting_p.hand.get_card_at(move.source_index)
-                if not card_to_place: return self 
+                if not card_to_place: return self
                 
-                # 1. Retirar carta de la mano
+                # Verificar si la carta necesita sacrificios (tributos)
+                tributes_needed = 0
+                if card_to_place.stars >= 6:
+                    tributes_needed = 2
+                elif card_to_place.stars >= 5:
+                    tributes_needed = 1
+                
+                # Si se necesitan sacrificios, validar que estén proporcionados
+                if tributes_needed > 0:
+                    if not move.fusion_materials_indices or len(move.fusion_materials_indices) != tributes_needed:
+                        return self  # Sacrificios insuficientes
+                    
+                    # 1. Remover tributos (sacrificios) del campo, en orden descendente para evitar cambio de índices
+                    tribute_indices = sorted(move.fusion_materials_indices, reverse=True)
+                    new_field = acting_p.field
+                    for tribute_idx in tribute_indices:
+                        new_field, sacrificed_card = new_field.remove_monster(tribute_idx)
+                        # Opcionalmente, enviar al cementerio
+                        acting_p = acting_p.send_card_to_graveyard(sacrificed_card)
+                    
+                    acting_p = acting_p.get_copy_with_field(new_field)
+                
+                # 2. Retirar carta de la mano
                 new_hand, _ = acting_p.hand.remove_card_at(move.source_index)
                 
-                # 2. Colocar carta en el campo
+                # 3. Colocar carta en el campo
                 position = move.position if move.position else Position.FACE_UP_ATK
                 new_field = acting_p.field.place_monster(card_to_place, move.target_index, position)
                 
-                # 3. Actualizar jugador
+                # 4. Actualizar jugador
                 acting_p = acting_p.get_copy_with_hand(new_hand)
                 acting_p = acting_p.get_copy_with_field(new_field)
                 acting_p = acting_p.get_copy_with_summon_used(True) # Usa la invocación normal
@@ -368,36 +390,56 @@ class GameState:
                     if defending_pos == Position.FACE_UP_ATK:
                         # Batalla ATK vs ATK
                         atk_diff = attacking_card.attack - defending_card.attack
-                        
                         if atk_diff > 0:
                             opponent_p = opponent_p.take_damage(atk_diff)
                             new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
                             opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
-                            
                         elif atk_diff < 0:
                             acting_p = acting_p.take_damage(abs(atk_diff))
                             new_act_field, destroyed = acting_p.field.remove_monster(move.source_index)
                             acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed)
-                            
                         elif atk_diff == 0:
                             new_opp_field, destroyed_opp = opponent_p.field.remove_monster(move.target_index)
                             opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed_opp)
-                            
                             new_act_field, destroyed_act = acting_p.field.remove_monster(move.source_index)
                             acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed_act)
+                    if defending_pos == Position.FACE_UP_ATK:
+                        # Nueva regla: si el atacante tiene más ATK y más DEF que el defensor -> defensor eliminado
+                        # en caso contrario -> atacante eliminado
+                        if attacking_card.attack > defending_card.attack and attacking_card.defense > defending_card.defense:
+                            # defensor destruido; el oponente recibe daño igual a la diferencia de ATK
+                            atk_diff = attacking_card.attack - defending_card.attack
+                            if atk_diff > 0:
+                                opponent_p = opponent_p.take_damage(atk_diff)
+                            new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
+                            opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
+                        else:
+                            # atacante destruido; opcionalmente infligir daño si el defensor tiene más ATK
+                            atk_diff = defending_card.attack - attacking_card.attack
+                            if atk_diff > 0:
+                                acting_p = acting_p.take_damage(atk_diff)
+                            new_act_field, destroyed = acting_p.field.remove_monster(move.source_index)
+                            acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed)
                             
                     elif defending_pos == Position.FACE_UP_DEF:
                         # Batalla ATK vs DEF
                         def_diff = defending_card.defense - attacking_card.attack
-                        
                         if def_diff < 0:
                             # Monstruo destruido (no hay daño a LP)
                             new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
                             opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
-                            
                         elif def_diff > 0:
                             # Jugador atacante recibe daño (no hay destrucción)
                             acting_p = acting_p.take_damage(def_diff)
+                    elif defending_pos == Position.FACE_UP_DEF:
+                        # Aplicar regla similar para ATK vs DEF: si atacante supera en ATK y DEF -> defensor eliminado
+                        if attacking_card.attack > defending_card.attack and attacking_card.defense > defending_card.defense:
+                            new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
+                            opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
+                        else:
+                            # Atacante eliminado (no puede continuar atacando)
+                            new_act_field, destroyed_act = acting_p.field.remove_monster(move.source_index)
+                            acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed_act)
         
         # --- Asignación de Jugadores Actualizados ---
 

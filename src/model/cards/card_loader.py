@@ -37,11 +37,15 @@ def load_cards(filepath: str)-> dict:
     for card_data in data:
         try:
             # Crear la carta con todos los parámetros necesarios
+            # Si no hay 'stars' en el JSON, usar un valor por defecto basado en ATK
+            stars = card_data.get('stars', 3)  # Default 3 estrellas
+            
             card = Card(
                 name=card_data['name'],
                 number=card_data['number'],
                 attack=card_data['attack'],
                 defense=card_data['defense'],
+                stars=stars
             )
 
             # Usar el número de carta como clave (o crear un ID si es necesario)

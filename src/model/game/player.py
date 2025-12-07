@@ -2,7 +2,7 @@ from typing import List, Tuple, Optional
 from cards.card import Card
 from .hand import Hand
 from .field import Field 
-from dataclasses import dataclass, replace, field
+from dataclasses import dataclass, replace, field as dataclass_field
 
 @dataclass(frozen=True)
 class Player:
@@ -15,12 +15,12 @@ class Player:
     life_points: int = 8000
     
     # --- Delegación de Estado ---
-    hand: Hand = field(default_factory=Hand)
-    field: Field = field(default_factory=Field) 
+    hand: Hand = dataclass_field(default_factory=Hand)
+    field: Field = dataclass_field(default_factory=Field) 
     
     # Deck y Graveyard se mantienen inmutables con Tuplas
-    deck: Tuple[Card, ...] = field(default_factory=tuple)
-    graveyard: Tuple[Card, ...] = field(default_factory=tuple)
+    deck: Tuple[Card, ...] = dataclass_field(default_factory=tuple)
+    graveyard: Tuple[Card, ...] = dataclass_field(default_factory=tuple)
     
     can_normal_summon: bool = True # Flag para limitar 1 invocación normal por Main Phase
     
