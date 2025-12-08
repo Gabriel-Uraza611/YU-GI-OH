@@ -1,26 +1,24 @@
 '''
 Módulo para cargar y manejar cartas desde archivos JSON.
 
-Este módulo proporciona funciones para cargar datos de cartas desde archivos
-JSON y convertirlos en instancias de la clase Card, facilitando la gestión
-de mazos y colecciones de cartas en juegos de cartas coleccionables.
+Este módulo proporciona funciones para cargar datos de cartas desde un archivo
+JSON y convertirlos en instancias de la clase Card.
 '''
 import json
 from .card import Card
+import os
 
 
-def load_cards(filepath: str)-> dict:
-
+def load_cards(filepath: str) -> dict:
     """
     Carga cartas desde un archivo JSON.
-    
+
     Args:
         filepath: Ruta al archivo JSON con los datos de las cartas
-        
+
     Returns:
         dict: Diccionario con las cartas cargadas, clave: número de carta
     """
-
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -36,19 +34,28 @@ def load_cards(filepath: str)-> dict:
     all_cards = {}
     for card_data in data:
         try:
-            # Crear la carta con todos los parámetros necesarios
-            # Si no hay 'stars' en el JSON, usar un valor por defecto basado en ATK
-            stars = card_data.get('stars', 3)  # Default 3 estrellas
-            
+            # Leer estrellas y nombre de imagen (si existe)
+            stars = card_data.get('stars', 3)
+            image = card_data.get('image')  # nombre de archivo (opcional)
+
+            # Opcional: si no hay imagen en JSON, intentar encontrar un archivo por número
+            # assets_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'assets', 'images')
+            # if not image:
+            #     for ext in ('.png', '.jpg', '.webp', '.jpeg'):
+            #         candidate = os.path.join(assets_dir, f"{card_data['number']}{ext}")
+            #         if os.path.exists(candidate):
+            #             image = f"{card_data['number']}{ext}"
+            #             break
+
             card = Card(
                 name=card_data['name'],
                 number=card_data['number'],
                 attack=card_data['attack'],
                 defense=card_data['defense'],
-                stars=stars
+                stars=stars,
+                image=image
             )
 
-            # Usar el número de carta como clave (o crear un ID si es necesario)
             all_cards[card.number] = card
 
         except KeyError as e:

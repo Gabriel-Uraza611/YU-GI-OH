@@ -3,12 +3,14 @@ En esta clase se definen los atributos de cada carta y el metodo __repr__ para r
 la carta como una cadena de texto.
 '''
 
+from typing import Optional
+
 class Card:
     '''
     Clase que representa una carta con sus atributos.
     '''
 
-    def __init__(self, name:str, number:str, attack:int, defense:int, stars:int = 3):
+    def __init__(self, name: str, number: str, attack: int, defense: int, stars: int = 3, image: Optional[str] = None):
 
         """
         Args:
@@ -17,6 +19,7 @@ class Card:
             attack: Puntos de ataque
             defense: Puntos de defensa
             stars: Número de estrellas (nivel) para invocación. Default 3.
+            image: Nombre de archivo de la imagen dentro de assets/images (opcional)
         """
 
         self.name = name
@@ -25,6 +28,7 @@ class Card:
         self.defense = defense
         self.stars = stars
         self.position = 'atk'  # 'atk' o 'def' (ataque o defensa)
+        self.image = image
 
     def __repr__(self):
 
