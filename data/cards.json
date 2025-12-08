@@ -165,8 +165,8 @@
     { 
         "name": "Armored Zombie",
         "number": "096",
-        "attack": 1890,
-        "defense": 1720,
+        "attack": 1600,
+        "defense": 0,
         "image": "096.webp"
     },
     { 
@@ -179,38 +179,38 @@
     { 
         "name": "Dancing Elf",
         "number": "395",
-        "attack": 1350,
-        "defense": 1510
+        "attack": 300,
+        "defense": 200
     },
     { 
         "name": "Magician of Faith",
         "number": "428",
-        "attack": 1720,
-        "defense": 1380
+        "attack": 300,
+        "defense": 400
     },
     { 
         "name": "Dragon Piper",
         "number": "040",
-        "attack": 980,
-        "defense": 1050
+        "attack": 200,
+        "defense": 1800
     },
     { 
         "name": "Orion the Battle King",
         "number": "126",
-        "attack": 2420,
-        "defense": 2180
+        "attack": 1800,
+        "defense": 1500
     },
     { 
         "name": "Skull servant",
         "number": "024",
-        "attack": 1560,
-        "defense": 1340
+        "attack": 300,
+        "defense": 200
     },
     { 
-        "name": "Milius Radiant",
+        "name": "Milus Radiant",
         "number": "527",
-        "attack": 1850,
-        "defense": 1620
+        "attack": 300,
+        "defense": 250
     },
     { 
         "name": "Petit Dragon",
