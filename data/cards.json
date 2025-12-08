@@ -1,497 +1,586 @@
-[ 
+[
     { 
         "name": "Mystical Elf",
         "number": "002",
-        "attack": 800,
-        "defense": 2000,
+        "attack": 1450,
+        "defense": 1820,
         "image": "002.png",
         "stars": 4
     },
     { 
         "name": "Baby Dragon",
         "number": "004",
-        "attack": 1200,
-        "defense": 700,
+        "attack": 1680,
+        "defense": 1350,
         "image": "004.png",
         "stars": 3
     },
     { 
         "name": "Shadow Specter",
         "number": "009",
-        "attack": 500,
-        "defense": 200,
-        "image": "009.webp"
+        "attack": 950,
+        "defense": 1100,
+        "image": "009.webp",
+        "stars": 1
     },
     { 
         "name": "Blackland Fire Dragon",
         "number": "010",
-        "attack": 1500,
-        "defense": 800,
-        "image": "010.webp"
+        "attack": 2150,
+        "defense": 1790,
+        "image": "010.webp",
+        "stars": 4
     },
     { 
         "name": "Sword Arm of Dragon",
         "number": "011",
-        "attack": 1750,
-        "defense": 2030,
-        "image": "011.png"
+        "attack": 2480,
+        "defense": 2340,
+        "image": "011.png",
+        "stars": 6
     },
     { 
         "name": "Flame Swordsman",
         "number": "015",
-        "attack": 1800,
-        "defense": 1600,
-        "image": "015.webp"
+        "attack": 1620,
+        "defense": 1540,
+        "image": "015.webp",
+        "stars": 5
     },
     { 
         "name": "Summoned Skull",
         "number": "022",
-        "attack": 2500,
-        "defense": 1200,
-        "image": "022.webp"
+        "attack": 2050,
+        "defense": 1680,
+        "image": "022.webp",
+        "stars": 6
     },
     { 
         "name": "The Wicked Worm Beast",
         "number": "023",
-        "attack": 1400,
-        "defense": 700,
-        "image": "023.webp"
+        "attack": 1380,
+        "defense": 1260,
+        "image": "023.webp",
+        "stars": 3
     },
     { 
         "name": "Zombie Warrior",
         "number": "030",
-        "attack": 1200,
-        "defense": 900,
-        "image": "030.webp"
+        "attack": 1120,
+        "defense": 1450,
+        "image": "030.webp",
+        "stars": 3
     },
     { 
         "name": "Koumori Dragon",
         "number": "031",
-        "attack": 1500,
-        "defense": 1200,
-        "image": "031.webp"
+        "attack": 1890,
+        "defense": 1710,
+        "image": "031.webp",
+        "stars": 4
     },
     { 
         "name": "Judge Man",
         "number": "033",
-        "attack": 2200,
-        "defense": 1500,
-        "image": "033.png"
+        "attack": 2280,
+        "defense": 2050,
+        "image": "033.png",
+        "stars": 6
     },
     { 
         "name": "The Snake Hair",
         "number": "036",
-        "attack": 1500,
-        "defense": 1200,
-        "image": "036.webp"
+        "attack": 1550,
+        "defense": 1380,
+        "image": "036.webp",
+        "stars": 4
     },
     { 
         "name": "Gaia The Dragon Champion",
         "number": "037",
-        "attack": 2600,
-        "defense": 2100,
-        "image": "037.jpg"
+        "attack": 2640,
+        "defense": 2280,
+        "image": "037.jpg",
+        "stars": 7
     },
     { 
         "name": "Curse of Dragon",
         "number": "039",
-        "attack": 2000,
-        "defense": 1500,
-        "image": "039.jpg"
+        "attack": 1820,
+        "defense": 1620,
+        "image": "039.jpg",
+        "stars": 5
     },
     { 
         "name": "Celtic Guardian",
         "number": "041",
-        "attack": 1400,
-        "defense": 1200,
-        "image": "041.jpg"
+        "attack": 1360,
+        "defense": 1490,
+        "image": "041.jpg",
+        "stars": 4
     },
     { 
         "name": "Harpie Lady Sisters",
         "number": "063",
-        "attack": 1950,
-        "defense": 2100,
-        "image": "063.jpg"
+        "attack": 2180,
+        "defense": 1850,
+        "image": "063.jpg",
+        "stars": 6
     },
     { 
         "name": "Tiger Axe",
         "number": "064",
-        "attack": 1300,
-        "defense": 1100,
-        "image": "064.webp"
+        "attack": 1510,
+        "defense": 1320,
+        "image": "064.webp",
+        "stars": 4
     },
     { 
         "name": "Thousand Dragon",
         "number": "069",
-        "attack": 2400,
-        "defense": 2000,
-        "image": "069.webp"
+        "attack": 2520,
+        "defense": 2160,
+        "image": "069.webp",
+        "stars": 7
     },
     { 
         "name": "Cocoon of Evolution",
         "number": "072",
-        "attack": 0,
-        "defense": 2000,
-        "image": "072.webp"
+        "attack": 1240,
+        "defense": 1580,
+        "image": "072.webp",
+        "stars": 3
     },
     { 
         "name": "Kairyu-Shin",
         "number": "073",
-        "attack": 1800,
-        "defense": 1500,
-        "image": "073.jpg"
+        "attack": 2380,
+        "defense": 2040,
+        "image": "073.jpg",
+        "stars": 5
     },
     { 
         "name": "Red Eyes B. Dragon",
         "number": "082",
-        "attack": 2400,
-        "defense": 2000,
-        "image": "082.jpg"
+        "attack": 2750,
+        "defense": 2420,
+        "image": "082.jpg",
+        "stars": 7
     },
     { 
         "name": "Reaper of the Cards",
         "number": "084",
-        "attack": 1380,
-        "defense": 1930,
-        "image": "084.png"
+        "attack": 1680,
+        "defense": 1450,
+        "image": "084.png",
+        "stars": 5
     },
     { 
         "name": "Rabid Horseman",
         "number": "092",
-        "attack": 2000,
-        "defense": 1700,
-        "image": "092.jpg"
+        "attack": 1420,
+        "defense": 1260,
+        "image": "092.jpg",
+        "stars": 6
     },
     { 
         "name": "Armored Zombie",
         "number": "096",
-        "attack": 1500,
-        "defense": 0,
-        "image": "096.webp"
+        "attack": 1890,
+        "defense": 1720,
+        "image": "096.webp",
+        "stars": 3
     },
     { 
         "name": "Dragon Zombie",
         "number": "097",
-        "attack": 1600,
-        "defense": 0,
-        "image": "097.webp"
+        "attack": 2140,
+        "defense": 1880,
+        "image": "097.webp",
+        "stars": 3
     },
     { 
         "name": "Dancing Elf",
         "number": "395",
-        "attack": 300,
-        "defense": 200
+        "attack": 1350,
+        "defense": 1510,
+        "image": "",
+        "stars": 1
     },
     { 
         "name": "Magician of Faith",
         "number": "428",
-        "attack": 300,
-        "defense": 400
+        "attack": 1720,
+        "defense": 1380,
+        "image": "",
+        "stars": 1
     },
     { 
         "name": "Dragon Piper",
         "number": "040",
-        "attack": 200,
-        "defense": 1800
+        "attack": 980,
+        "defense": 1050,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "Orion the Battle King",
         "number": "126",
-        "attack": 1800,
-        "defense": 1500
+        "attack": 2420,
+        "defense": 2180,
+        "image": "",
+        "stars": 5
     },
     { 
         "name": "Skull servant",
         "number": "024",
-        "attack": 300,
-        "defense": 200
+        "attack": 1560,
+        "defense": 1340,
+        "image": "",
+        "stars": 1
     },
     { 
-        "name": "Milus Radiant",
+        "name": "Milius Radiant",
         "number": "527",
-        "attack": 300,
-        "defense": 250
+        "attack": 1850,
+        "defense": 1620,
+        "image": "",
+        "stars": 1
     },
     { 
         "name": "Petit Dragon",
         "number": "200",
         "attack": 1210,
-        "defense": 1420
+        "defense": 1420,
+        "image": "",
+        "stars": 2
     },
     { 
         "name": "Lord of Zemia",
         "number": "164",
         "attack": 2080,
-        "defense": 1750
+        "defense": 1750,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Skelgon",
         "number": "545",
         "attack": 1680,
-        "defense": 1530
+        "defense": 1530,
+        "image": "",
+        "stars": 6
     },
     { 
         "name": "Doron",
         "number": "195",
         "attack": 1420,
-        "defense": 1280
+        "defense": 1280,
+        "image": "",
+        "stars": ""
     },
     { 
         "name": "Hinotama Soul",
         "number": "210",
         "attack": 2240,
-        "defense": 1920
+        "defense": 1920,
+        "image": "",
+        "stars": 2
     },
     { 
         "name": "Ansatsu",
         "number": "127",
         "attack": 1560,
-        "defense": 1380
+        "defense": 1380,
+        "image": "",
+        "stars": 5
     },
     { 
         "name": "Job-Change Mirror",
         "number": "103",
         "attack": 1340,
-        "defense": 1490
+        "defense": 1490,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "Dark Titan of Terror",
         "number": "233",
         "attack": 2620,
-        "defense": 2320
+        "defense": 2320,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Mystery Hand",
         "number": "137",
         "attack": 1450,
-        "defense": 1210
+        "defense": 1210,
+        "image": "",
+        "stars": 2
     },
     { 
         "name": "Ancient Jar",
         "number": "167",
         "attack": 1820,
-        "defense": 1560
+        "defense": 1560,
+        "image": "",
+        "stars": 2
     },
     { 
         "name": "Dokuroizo the Grim Reaper",
         "number": "153",
         "attack": 2180,
-        "defense": 1840
+        "defense": 1840,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "Queen's Double",
         "number": "635",
         "attack": 1640,
-        "defense": 1420
+        "defense": 1420,
+        "image": "",
+        "stars": 1
     },
     { 
         "name": "Fairy Dragon",
         "number": "603",
         "attack": 1280,
-        "defense": 1540
+        "defense": 1540,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Madjinn Gunn",
         "number": "232",
         "attack": 2350,
-        "defense": 2050
+        "defense": 2050,
+        "image": "",
+        "stars": 2
     },
     { 
         "name": "The Judgement Hand",
         "number": "165",
         "attack": 1520,
-        "defense": 1350
+        "defense": 1350,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "SkullStalker",
         "number": "226",
         "attack": 1960,
-        "defense": 1780
+        "defense": 1780,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "Graveyard and the Hand of Invitation",
         "number": "108",
         "attack": 1380,
-        "defense": 1480
+        "defense": 1480,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "Temple of Skulls",
         "number": "146",
         "attack": 2080,
-        "defense": 1820
+        "defense": 1820,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Gaia the Fierce Knight",
         "number": "038",
         "attack": 2240,
-        "defense": 1950
+        "defense": 1950,
+        "image": "",
+        "stars": 7
     },
     { 
         "name": "Harpie Lady",
         "number": "062",
         "attack": 1620,
-        "defense": 1360
-    },
-    { 
-        "name": "Elegant Egoist OJO MAGICA",
-        "number": "318",
-        "attack": 1480,
-        "defense": 1240
+        "defense": 1360,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Saggi the Dark Clown",
         "number": "034",
         "attack": 2140,
-        "defense": 1850
+        "defense": 1850,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "Battle Ox",
         "number": "026",
         "attack": 1780,
-        "defense": 1620
+        "defense": 1620,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Mystic Horseman",
         "number": "091",
         "attack": 1920,
-        "defense": 1740
+        "defense": 1740,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Crass Clown",
         "number": "095",
         "attack": 1340,
-        "defense": 1480
-    },
-    { 
-        "name": "Final Flame OJO MAGICA",
-        "number": "345",
-        "attack": 2480,
-        "defense": 2120
+        "defense": 1480,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Ancient Brain",
         "number": "175",
         "attack": 1620,
-        "defense": 1380
-    },
-    { 
-        "name": "Invinsible Wire OJO TRAMPA",
-        "number": "684",
-        "attack": 2320,
-        "defense": 2020
+        "defense": 1380,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "Zone Eater",
         "number": "393",
         "attack": 1450,
-        "defense": 1260
-    },
-    { 
-        "name": "Widespread Ruin OJO TRAMPA",
-        "number": "686",
-        "attack": 2680,
-        "defense": 2380 
+        "defense": 1260,
+        "image": "",
+        "stars": 1
     },
     { 
         "name": "Monster Eye",
         "number": "402",
         "attack": 1560,
-        "defense": 1320
-    },
-    { 
-        "name": "House of Adhesive Tape",
-        "number": "681",
-        "attack": 1820,
-        "defense": 1540
+        "defense": 1320,
+        "image": "",
+        "stars": 1
     },
     { 
         "name": "Dokurorider",
         "number": "719",
         "attack": 2180,
-        "defense": 1920
+        "defense": 1920,
+        "image": "",
+        "stars": 6
     },
     { 
         "name": "Spike Seadra",
         "number": "448",
         "attack": 1380,
-        "defense": 1480
+        "defense": 1480,
+        "image": "",
+        "stars": 5
     },
     { 
         "name": "Dimensional Warrior",
         "number": "256",
         "attack": 2240,
-        "defense": 1980
+        "defense": 1980,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Frenzied Panda",
         "number": "201",
         "attack": 1620,
-        "defense": 1420
+        "defense": 1420,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Masaki the Legendary Swordsman",
         "number": "293",
         "attack": 2540,
-        "defense": 2280
+        "defense": 2280,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Time Wizard",
         "number": "016",
         "attack": 1780,
-        "defense": 1640
+        "defense": 1640,
+        "image": "",
+        "stars": 2
     },
     { 
         "name": "Mikazukinoyaiba",
         "number": "711",
         "attack": 2360,
-        "defense": 2080
+        "defense": 2080,
+        "image": "",
+        "stars": 7
     },
     { 
         "name": "LaMoon",
         "number": "128",
         "attack": 1450,
-        "defense": 1240
+        "defense": 1240,
+        "image": "",
+        "stars": 5
     },
     { 
         "name": "Yamadron",
         "number": "357",
         "attack": 2020,
-        "defense": 1780
+        "defense": 1780,
+        "image": "",
+        "stars": 5
     },
     { 
         "name": "Water Girl",
         "number": "435",
         "attack": 1320,
-        "defense": 1520
+        "defense": 1520,
+        "image": "",
+        "stars": 4
     },
     { 
         "name": "Tyhone #2",
         "number": "555",
         "attack": 2420,
-        "defense": 2140
+        "defense": 2140,
+        "image": "",
+        "stars": 6
     },
     { 
         "name": "B.Dragon Jungle King",
         "number": "571",
         "attack": 1880,
-        "defense": 1680
+        "defense": 1680,
+        "image": "",
+        "stars": 6
     },
     { 
         "name": "Flame Ghost",
         "number": "215",
         "attack": 1560,
-        "defense": 1380
+        "defense": 1380,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "Sonic Maid",
         "number": "299",
         "attack": 1820,
-        "defense": 1620
+        "defense": 1620,
+        "image": "",
+        "stars": 3
     },
     { 
         "name": "Takriminos",
         "number": "353",
         "attack": 2280,
-        "defense": 2050
+        "defense": 2050,
+        "image": "",
+        "stars": 4
     }
 ]
