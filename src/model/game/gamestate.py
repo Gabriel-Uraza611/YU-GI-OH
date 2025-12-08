@@ -72,7 +72,7 @@ class GameState:
         ai_field_power = 0
         for slot in self.ai_player.field.monsters:
             if slot:
-                card, position = slot
+                card, position, _ = slot
                 # ATK cuenta si está en ataque, DEF si está en defensa
                 power = card.attack if position == Position.FACE_UP_ATK else card.defense
                 ai_field_power += power
@@ -80,7 +80,7 @@ class GameState:
         player_field_power = 0
         for slot in self.player.field.monsters:
             if slot:
-                card, position = slot
+                card, position, _ = slot
                 power = card.attack if position == Position.FACE_UP_ATK else card.defense
                 player_field_power += power
                 
@@ -183,7 +183,7 @@ class GameState:
                 if monster_slot:
                     # Permite cambiar de posición solo una vez por turno (simplificación)
                     
-                    card, current_pos = monster_slot
+                    card, current_pos, _ = monster_slot
                     # Cambio a ATK
                     if current_pos != Position.FACE_UP_ATK:
                         moves.append(Move(
@@ -203,31 +203,32 @@ class GameState:
         elif self.phase == 'battle':
             # 1. Pasar a End
             moves.append(Move(action_type=ActionType.PASS, target_zone='end'))
-            
+
             # 2. Ataque
-            
-            # Monstruos que pueden atacar (asumimos que todos en ATK pueden atacar)
+            # Monstruos que pueden atacar (asumimos que todos en ATK pueden atacar y que no hayan atacado ya)
             for i in range(current_p.field.MONSTER_SLOTS):
                 monster_slot = current_p.field.monsters[i]
-                if monster_slot and monster_slot[1] == Position.FACE_UP_ATK:
-                    
-                    # a) Ataque directo a LP (si no hay monstruos en campo oponente)
-                    if all(slot is None for slot in opponent_p.field.monsters):
-                        moves.append(Move(
-                            action_type=ActionType.ATTACK, 
-                            source_index=i, 
-                            target_index=-1 # Ataque directo a LP
-                        ))
-                    else:
-                        # b) Ataque a monstruos del oponente
-                        for j in range(opponent_p.field.MONSTER_SLOTS):
-                            if opponent_p.field.monsters[j] is not None:
-                                moves.append(Move(
-                                    action_type=ActionType.ATTACK, 
-                                    source_index=i, 
-                                    target_index=j # Slot del monstruo oponente
-                                ))
-        
+                if monster_slot:
+                    # monster_slot is (Card, Position, has_attacked)
+                    _, pos, has_attacked = monster_slot
+                    if pos == Position.FACE_UP_ATK and not has_attacked:
+                        # a) Ataque directo a LP (si no hay monstruos en campo oponente)
+                        if all(slot is None for slot in opponent_p.field.monsters):
+                            moves.append(Move(
+                                action_type=ActionType.ATTACK,
+                                source_index=i,
+                                target_index=-1
+                            ))
+                        else:
+                            # b) Ataque a monstruos del oponente
+                            for j in range(opponent_p.field.MONSTER_SLOTS):
+                                if opponent_p.field.monsters[j] is not None:
+                                    moves.append(Move(
+                                        action_type=ActionType.ATTACK,
+                                        source_index=i,
+                                        target_index=j
+                                    ))
+
         # --- FASE FINAL (End Phase) ---
         elif self.phase == 'end':
             # Solo pasar el turno
@@ -239,226 +240,240 @@ class GameState:
         """
         Retorna un NUEVO GameState que resulta de aplicar el movimiento dado.
         """
-        if self.is_game_over():
-            return self
+        # if self.is_game_over():
+        #     return self
 
-        # Obtener copias de los jugadores (para modificar y crear un nuevo estado)
-        # Esto es crucial para la inmutabilidad
-        new_player, new_ai_player = self.player, self.ai_player
-        
-        # Identificar quién está actuando
-        is_ai_turn = self.current_turn == 'ai'
-        acting_p = new_ai_player if is_ai_turn else new_player
-        opponent_p = new_player if is_ai_turn else new_ai_player
-        
-        new_phase = self.phase
-        new_turn = self.current_turn
-        
-        # --- Lógica de Transición de Fases (PASS) ---
-        
-        if move.action_type == ActionType.PASS:
-            if move.target_zone == 'main':
-                new_phase = 'main'
-            elif move.target_zone == 'battle':
-                new_phase = 'battle'
-            elif move.target_zone == 'end':
-                new_phase = 'end'
-            elif move.target_zone == 'change_turn':
-                
-                # 1. Cambiar turno y fase
-                new_turn = 'player' if self.current_turn == 'ai' else 'ai'
-                new_phase = 'draw' 
-                
-                # 2. Resetear flag de Invocación Normal para ambos jugadores
-                new_player = new_player.get_copy_with_summon_used(False)
-                new_ai_player = new_ai_player.get_copy_with_summon_used(False)
-                
-                # 3. Ejecutar Robo (Draw) para el jugador que recibe el turno
-                next_acting_p = new_ai_player if new_turn == 'ai' else new_player
-                next_acting_p, _ = next_acting_p.draw_card()
-                
-                if new_turn == 'ai':
-                    new_ai_player = next_acting_p
-                else:
-                    new_player = next_acting_p
+        try:
+            # Obtener copias de los jugadores (para modificar y crear un nuevo estado)
+            # Esto es crucial para la inmutabilidad
+            new_player, new_ai_player = self.player, self.ai_player
 
-        # --- Lógica de Acciones en Main Phase ---
+            # Identificar quién está actuando
+            is_ai_turn = self.current_turn == 'ai'
+            acting_p = new_ai_player if is_ai_turn else new_player
+            opponent_p = new_player if is_ai_turn else new_ai_player
 
-        elif self.phase == 'main':
-            
-            if move.action_type in (ActionType.SUMMON, ActionType.SET):
-                if move.target_index is None or move.source_index is None or not acting_p.can_normal_summon: return self
-                
-                card_to_place = acting_p.hand.get_card_at(move.source_index)
-                if not card_to_place: return self
-                
-                # Verificar si la carta necesita sacrificios (tributos)
-                tributes_needed = 0
-                if card_to_place.stars >= 6:
-                    tributes_needed = 2
-                elif card_to_place.stars >= 5:
-                    tributes_needed = 1
-                
-                # Si se necesitan sacrificios, validar que estén proporcionados
-                if tributes_needed > 0:
-                    if not move.fusion_materials_indices or len(move.fusion_materials_indices) != tributes_needed:
-                        return self  # Sacrificios insuficientes
-                    
-                    # 1. Remover tributos (sacrificios) del campo, en orden descendente para evitar cambio de índices
-                    tribute_indices = sorted(move.fusion_materials_indices, reverse=True)
-                    new_field = acting_p.field
-                    for tribute_idx in tribute_indices:
-                        new_field, sacrificed_card = new_field.remove_monster(tribute_idx)
-                        # Opcionalmente, enviar al cementerio
-                        acting_p = acting_p.send_card_to_graveyard(sacrificed_card)
-                    
+            new_phase = self.phase
+            new_turn = self.current_turn
+
+            # --- Lógica de Transición de Fases (PASS) ---
+            if move.action_type == ActionType.PASS:
+                if move.target_zone == 'main':
+                    new_phase = 'main'
+                    # RESET: Permitir invocación normal al entrar a Main Phase
+                    acting_p = acting_p.get_copy_with_summon_used(False)
+                elif move.target_zone == 'battle':
+                    new_phase = 'battle'
+                    # Reset attack flags for acting player's field when entering Battle Phase
+                    try:
+                        new_field = acting_p.field.reset_attacks()
+                        acting_p = acting_p.get_copy_with_field(new_field)
+                    except Exception:
+                        pass
+                elif move.target_zone == 'end':
+                    new_phase = 'end'
+                elif move.target_zone == 'change_turn':
+
+                    # 1. Cambiar turno y fase
+                    new_turn = 'player' if self.current_turn == 'ai' else 'ai'
+                    new_phase = 'draw'
+
+                    # 2. Resetear flag de Invocación Normal para ambos jugadores
+                    new_player = new_player.get_copy_with_summon_used(False)
+                    new_ai_player = new_ai_player.get_copy_with_summon_used(False)
+
+                    # 3. Ejecutar Robo (Draw) para el jugador que recibe el turno
+                    next_acting_p = new_ai_player if new_turn == 'ai' else new_player
+                    next_acting_p, _ = next_acting_p.draw_card()
+
+                    if new_turn == 'ai':
+                        new_ai_player = next_acting_p
+                    else:
+                        new_player = next_acting_p
+
+            # --- Lógica de Acciones en Main Phase ---
+            elif self.phase == 'main':
+
+                if move.action_type in (ActionType.SUMMON, ActionType.SET):
+                    if move.target_index is None or move.source_index is None or not acting_p.can_normal_summon: return self
+
+                    card_to_place = acting_p.hand.get_card_at(move.source_index)
+                    if not card_to_place: return self
+
+                    # Verificar si la carta necesita sacrificios (tributos)
+                    tributes_needed = 0
+                    if card_to_place.stars >= 6:
+                        tributes_needed = 2
+                    elif card_to_place.stars >= 5:
+                        tributes_needed = 1
+
+                    # Si se necesitan sacrificios, validar que estén proporcionados
+                    if tributes_needed > 0:
+                        if not move.fusion_materials_indices or len(move.fusion_materials_indices) != tributes_needed:
+                            return self  # Sacrificios insuficientes
+
+                        # 1. Remover tributos (sacrificios) del campo, en orden descendente para evitar cambio de índices
+                        tribute_indices = sorted(move.fusion_materials_indices, reverse=True)
+                        new_field = acting_p.field
+                        for tribute_idx in tribute_indices:
+                            new_field, sacrificed_card = new_field.remove_monster(tribute_idx)
+                            # Opcionalmente, enviar al cementerio
+                            acting_p = acting_p.send_card_to_graveyard(sacrificed_card)
+
+                        acting_p = acting_p.get_copy_with_field(new_field)
+
+                    # 2. Retirar carta de la mano
+                    new_hand, _ = acting_p.hand.remove_card_at(move.source_index)
+
+                    # 3. Colocar carta en el campo
+                    position = move.position if move.position else Position.FACE_UP_ATK
+                    new_field = acting_p.field.place_monster(card_to_place, move.target_index, position)
+
+                    # 4. Actualizar jugador
+                    acting_p = acting_p.get_copy_with_hand(new_hand)
                     acting_p = acting_p.get_copy_with_field(new_field)
-                
-                # 2. Retirar carta de la mano
-                new_hand, _ = acting_p.hand.remove_card_at(move.source_index)
-                
-                # 3. Colocar carta en el campo
-                position = move.position if move.position else Position.FACE_UP_ATK
-                new_field = acting_p.field.place_monster(card_to_place, move.target_index, position)
-                
-                # 4. Actualizar jugador
-                acting_p = acting_p.get_copy_with_hand(new_hand)
-                acting_p = acting_p.get_copy_with_field(new_field)
-                acting_p = acting_p.get_copy_with_summon_used(True) # Usa la invocación normal
-                
-            elif move.action_type == ActionType.FUSION_SUMMON:
-                if not move.fusion_materials_indices or move.target_index is None: return self
-                
-                idx1, idx2 = move.fusion_materials_indices
-                card1 = acting_p.hand.get_card_at(idx1)
-                card2 = acting_p.hand.get_card_at(idx2)
-                
-                # Obtener resultado de fusión
-                result_id = get_fusion_result(card1, card2, self.all_recipes)
-                if not result_id or result_id not in self.all_cards: return self
-                
-                result_card = self.all_cards[result_id]
-                
-                # 1. Remover materiales (el índice mayor primero para no cambiar el menor)
-                remove_idx1 = max(idx1, idx2)
-                remove_idx2 = min(idx1, idx2)
-                
-                new_hand, material1 = acting_p.hand.remove_card_at(remove_idx1)
-                new_hand, material2 = new_hand.remove_card_at(remove_idx2)
-                
-                # 2. Enviar materiales al cementerio
-                acting_p = acting_p.send_card_to_graveyard(material1)
-                acting_p = acting_p.send_card_to_graveyard(material2)
-                
-                # 3. Colocar resultado en campo (ATK por defecto)
-                new_field = acting_p.field.place_monster(result_card, move.target_index, Position.FACE_UP_ATK)
-                
-                # 4. Actualizar jugador con nuevo Hand y Field
-                acting_p = acting_p.get_copy_with_hand(new_hand)
-                acting_p = acting_p.get_copy_with_field(new_field)
+                    acting_p = acting_p.get_copy_with_summon_used(True) # Usa la invocación normal
 
-            elif move.action_type == ActionType.CHANGE_POSITION:
-                if move.source_index is None or move.position is None: return self
-                
-                new_field = acting_p.field.change_monster_position(move.source_index, move.position)
-                acting_p = acting_p.get_copy_with_field(new_field)
+                elif move.action_type == ActionType.FUSION_SUMMON:
+                    if not move.fusion_materials_indices or move.target_index is None: return self
 
-        # --- Lógica de Acciones en Battle Phase ---
+                    idx1, idx2 = move.fusion_materials_indices
+                    card1 = acting_p.hand.get_card_at(idx1)
+                    card2 = acting_p.hand.get_card_at(idx2)
 
-        elif self.phase == 'battle':
-            
-            if move.action_type == ActionType.ATTACK:
-                if move.source_index is None: return self
-                
-                attacking_slot = acting_p.field.monsters[move.source_index]
-                if not attacking_slot or attacking_slot[1] != Position.FACE_UP_ATK: return self
-                
-                attacking_card = attacking_slot[0]
-                
-                # A. Ataque Directo a LP
-                if move.target_index == -1:
-                    damage = attacking_card.attack
-                    opponent_p = opponent_p.take_damage(damage)
-                
-                # B. Ataque a Monstruo
-                elif move.target_index is not None:
-                    target_slot = opponent_p.field.monsters[move.target_index]
-                    if not target_slot: return self
+                    # Obtener resultado de fusión
+                    result_id = get_fusion_result(card1, card2, self.all_recipes)
+                    if not result_id or result_id not in self.all_cards: return self
+
+                    result_card = self.all_cards[result_id]
+
+                    # 1. Remover materiales (el índice mayor primero para no cambiar el menor)
+                    remove_idx1 = max(idx1, idx2)
+                    remove_idx2 = min(idx1, idx2)
+
+                    new_hand, material1 = acting_p.hand.remove_card_at(remove_idx1)
+                    new_hand, material2 = new_hand.remove_card_at(remove_idx2)
+
+                    # 2. Enviar materiales al cementerio
+                    acting_p = acting_p.send_card_to_graveyard(material1)
+                    acting_p = acting_p.send_card_to_graveyard(material2)
+
+                    # 3. Colocar resultado en campo (ATK por defecto)
+                    new_field = acting_p.field.place_monster(result_card, move.target_index, Position.FACE_UP_ATK)
+
+                    # 4. Actualizar jugador con nuevo Hand y Field
+                    acting_p = acting_p.get_copy_with_hand(new_hand)
+                    acting_p = acting_p.get_copy_with_field(new_field)
+
+                elif move.action_type == ActionType.CHANGE_POSITION:
+                    if move.source_index is None or move.position is None: return self
+
+                    new_field = acting_p.field.change_monster_position(move.source_index, move.position)
+                    acting_p = acting_p.get_copy_with_field(new_field)
+
+            # --- Lógica de Acciones en Battle Phase ---
+            elif self.phase == 'battle':
+
+                if move.action_type == ActionType.ATTACK:
+                    if move.source_index is None: return self
                     
-                    defending_card, defending_pos = target_slot
+                    attacking_slot = acting_p.field.monsters[move.source_index]
+                    if not attacking_slot or attacking_slot[1] != Position.FACE_UP_ATK: return self
                     
-                    if defending_pos == Position.FACE_UP_ATK:
-                        # Batalla ATK vs ATK
-                        atk_diff = attacking_card.attack - defending_card.attack
-                        if atk_diff > 0:
-                            opponent_p = opponent_p.take_damage(atk_diff)
-                            new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
-                            opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
-                        elif atk_diff < 0:
-                            acting_p = acting_p.take_damage(abs(atk_diff))
-                            new_act_field, destroyed = acting_p.field.remove_monster(move.source_index)
-                            acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed)
-                        elif atk_diff == 0:
-                            new_opp_field, destroyed_opp = opponent_p.field.remove_monster(move.target_index)
-                            opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed_opp)
-                            new_act_field, destroyed_act = acting_p.field.remove_monster(move.source_index)
-                            acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed_act)
-                    if defending_pos == Position.FACE_UP_ATK:
-                        # Nueva regla: si el atacante tiene más ATK y más DEF que el defensor -> defensor eliminado
-                        # en caso contrario -> atacante eliminado
-                        if attacking_card.attack > defending_card.attack and attacking_card.defense > defending_card.defense:
-                            # defensor destruido; el oponente recibe daño igual a la diferencia de ATK
+                    attacking_card = attacking_slot[0]
+                    
+                    # A. Ataque Directo a LP
+                    if move.target_index == -1:
+                        damage = attacking_card.attack
+                        opponent_p = opponent_p.take_damage(damage)
+                        print(f"¡{acting_p.name} ataca directamente a {opponent_p.name} por {damage} de daño!")
+                    # B. Ataque a Monstruo
+                    elif move.target_index is not None:
+                        # VALIDATE: Ensure target slot has a card
+                        if move.target_index < 0 or move.target_index >= opponent_p.field.MONSTER_SLOTS:
+                            return self  # Invalid target index
+                        
+                        target_slot = opponent_p.field.monsters[move.target_index]
+                        if not target_slot: 
+                            return self  # Target slot is empty
+                        
+                        defending_card, defending_pos, _ = target_slot
+                        
+                        # Only one battle outcome per attack
+                        if defending_pos == Position.FACE_UP_ATK:
+                            # Battle ATK vs ATK: Compare ATK values
                             atk_diff = attacking_card.attack - defending_card.attack
                             if atk_diff > 0:
                                 opponent_p = opponent_p.take_damage(atk_diff)
-                            new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
-                            opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
-                        else:
-                            # atacante destruido; opcionalmente infligir daño si el defensor tiene más ATK
-                            atk_diff = defending_card.attack - attacking_card.attack
-                            if atk_diff > 0:
-                                acting_p = acting_p.take_damage(atk_diff)
-                            new_act_field, destroyed = acting_p.field.remove_monster(move.source_index)
-                            acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed)
-                            
-                    elif defending_pos == Position.FACE_UP_DEF:
-                        # Batalla ATK vs DEF
-                        def_diff = defending_card.defense - attacking_card.attack
-                        if def_diff < 0:
-                            # Monstruo destruido (no hay daño a LP)
-                            new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
-                            opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
-                        elif def_diff > 0:
-                            # Jugador atacante recibe daño (no hay destrucción)
-                            acting_p = acting_p.take_damage(def_diff)
-                    elif defending_pos == Position.FACE_UP_DEF:
-                        # Aplicar regla similar para ATK vs DEF: si atacante supera en ATK y DEF -> defensor eliminado
-                        if attacking_card.attack > defending_card.attack and attacking_card.defense > defending_card.defense:
-                            new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
-                            opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
-                        else:
-                            # Atacante eliminado (no puede continuar atacando)
-                            new_act_field, destroyed_act = acting_p.field.remove_monster(move.source_index)
-                            acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed_act)
-        
-        # --- Asignación de Jugadores Actualizados ---
+                                new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
+                                opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
+                                print(f"El monstruo de {acting_p.name} destruye al de {opponent_p.name} en batalla (ATK vs ATK).")
+                            elif atk_diff < 0:
+                                acting_p = acting_p.take_damage(abs(atk_diff))
+                                new_act_field, destroyed = acting_p.field.remove_monster(move.source_index)
+                                acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed)
+                                print(f"El monstruo de {opponent_p.name} destruye al de {acting_p.name} en batalla (ATK vs ATK).")
+                            else:  # atk_diff == 0
+                                new_opp_field, destroyed_opp = opponent_p.field.remove_monster(move.target_index)
+                                opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed_opp)
+                                new_act_field, destroyed_act = acting_p.field.remove_monster(move.source_index)
+                                acting_p = acting_p.get_copy_with_field(new_act_field).send_card_to_graveyard(destroyed_act)
+                                print(f"Ambos monstruos son destruidos en una explosiva batalla (ATK vs ATK).")
+                                
+                        elif defending_pos == Position.FACE_UP_DEF:
+                            # Battle ATK vs DEF
+                            def_diff = defending_card.defense - attacking_card.attack
+                            if def_diff < 0:
+                                # Monstruo defendedor es destruido (no hay daño a LP)
+                                new_opp_field, destroyed = opponent_p.field.remove_monster(move.target_index)
+                                opponent_p = opponent_p.get_copy_with_field(new_opp_field).send_card_to_graveyard(destroyed)
+                                print(f"El monstruo de {acting_p.name} destruye al de {opponent_p.name} en batalla (ATK vs DEF).")
+                            else:  # def_diff >= 0
+                                # Jugador atacante recibe daño igual a la diferencia (no hay destrucción)
+                                if def_diff > 0:
+                                    acting_p = acting_p.take_damage(def_diff)
+                                    print(f"{acting_p.name} recibe {def_diff} de daño por el contraataque del monstruo en DEF.")
+                                else:
+                                    print(f"El ataque de {acting_p.name} no puede penetrar la defensa de {opponent_p.name}.")
 
-        if is_ai_turn:
-            final_player = opponent_p
-            final_ai_player = acting_p
-        else:
-            final_player = acting_p
-            final_ai_player = opponent_p
-        
-        # Retornar el nuevo estado inmutable
-        # Si la acción es PASS para cambiar de turno, se usa el new_turn y new_phase
-        is_turn_change = (move.action_type == ActionType.PASS and move.target_zone == 'change_turn')
-        
-        return GameState(
-            player=final_player, 
-            ai_player=final_ai_player, 
-            current_turn=new_turn if is_turn_change else self.current_turn,
-            phase=new_phase if move.action_type == ActionType.PASS else self.phase,
-            all_cards=self.all_cards,
-            all_recipes=self.all_recipes
-        )
+            # Finalmente, marcar que el monstruo atacante ya atacó (si aún está en campo)
+            try:
+                if 0 <= move.source_index < acting_p.field.MONSTER_SLOTS and acting_p.field.monsters[move.source_index] is not None:
+                    new_field = acting_p.field.mark_monster_attacked(move.source_index)
+                    acting_p = acting_p.get_copy_with_field(new_field)
+            except Exception:
+                # Si por algún motivo el índice ya no existe o el slot fue destruido durante la batalla,
+                # no hacemos nada (es seguro continuar).
+                pass
+
+            # --- Asignación de Jugadores Actualizados ---
+            if is_ai_turn:
+                final_player = opponent_p
+                final_ai_player = acting_p
+            else:
+                final_player = acting_p
+                final_ai_player = opponent_p
+
+            # Retornar el nuevo estado inmutable
+            # Si la acción es PASS para cambiar de turno, se usa el new_turn y new_phase
+            is_turn_change = (move.action_type == ActionType.PASS and move.target_zone == 'change_turn')
+
+            return GameState(
+                player=final_player,
+                ai_player=final_ai_player,
+                current_turn=new_turn if is_turn_change else self.current_turn,
+                phase=new_phase if move.action_type == ActionType.PASS else self.phase,
+                all_cards=self.all_cards,
+                all_recipes=self.all_recipes
+            )
+
+        except ValueError as ve:
+            print(f"[GameState] Movimiento inválido al aplicar move: {ve}")
+            return self
+        except Exception as e:
+            print(f"[GameState] Error al aplicar move: {e}")
+            return self
+
+    def get_copy_with_players(self, player: Player, ai_player: Player) -> 'GameState':
+        """Retorna una copia del GameState con los jugadores provistos (inmutable)."""
+        return replace(self, player=player, ai_player=ai_player)
