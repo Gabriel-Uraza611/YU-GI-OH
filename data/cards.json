@@ -123,57 +123,57 @@
     { 
         "name": "Thousand Dragon",
         "number": "069",
-        "attack": 2520,
-        "defense": 2160,
+        "attack": 2400,
+        "defense": 2000,
         "image": "069.webp"
     },
     { 
         "name": "Cocoon of Evolution",
         "number": "072",
-        "attack": 1240,
-        "defense": 1580,
+        "attack": 0,
+        "defense": 2000,
         "image": "072.webp"
     },
     { 
         "name": "Kairyu-Shin",
         "number": "073",
-        "attack": 2380,
-        "defense": 2040,
+        "attack": 1800,
+        "defense": 1500,
         "image": "073.jpg"
     },
     { 
         "name": "Red Eyes B. Dragon",
         "number": "082",
-        "attack": 2750,
-        "defense": 2420,
+        "attack": 2400,
+        "defense": 2000,
         "image": "082.jpg"
     },
     { 
         "name": "Reaper of the Cards",
         "number": "084",
-        "attack": 1680,
-        "defense": 1450,
+        "attack": 1380,
+        "defense": 1930,
         "image": "084.png"
     },
     { 
         "name": "Rabid Horseman",
         "number": "092",
-        "attack": 1420,
-        "defense": 1260,
+        "attack": 2000,
+        "defense": 1700,
         "image": "092.jpg"
     },
     { 
         "name": "Armored Zombie",
         "number": "096",
-        "attack": 1600,
+        "attack": 1500,
         "defense": 0,
         "image": "096.webp"
     },
     { 
         "name": "Dragon Zombie",
         "number": "097",
-        "attack": 2140,
-        "defense": 1880,
+        "attack": 1600,
+        "defense": 0,
         "image": "097.webp"
     },
     { 
