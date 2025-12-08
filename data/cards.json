@@ -2,122 +2,122 @@
     { 
         "name": "Mystical Elf",
         "number": "002",
-        "attack": 1450,
-        "defense": 1820,
+        "attack": 800,
+        "defense": 2000,
         "image": "002.png",
         "stars": 4
     },
     { 
         "name": "Baby Dragon",
         "number": "004",
-        "attack": 1680,
-        "defense": 1350,
+        "attack": 1200,
+        "defense": 700,
         "image": "004.png",
         "stars": 3
     },
     { 
         "name": "Shadow Specter",
         "number": "009",
-        "attack": 950,
-        "defense": 1100,
+        "attack": 500,
+        "defense": 200,
         "image": "009.webp"
     },
     { 
         "name": "Blackland Fire Dragon",
         "number": "010",
-        "attack": 2150,
-        "defense": 1790,
+        "attack": 1500,
+        "defense": 800,
         "image": "010.webp"
     },
     { 
         "name": "Sword Arm of Dragon",
         "number": "011",
-        "attack": 2480,
-        "defense": 2340,
+        "attack": 1750,
+        "defense": 2030,
         "image": "011.png"
     },
     { 
         "name": "Flame Swordsman",
         "number": "015",
-        "attack": 1620,
-        "defense": 1540,
+        "attack": 1800,
+        "defense": 1600,
         "image": "015.webp"
     },
     { 
         "name": "Summoned Skull",
         "number": "022",
-        "attack": 2050,
-        "defense": 1680,
+        "attack": 2500,
+        "defense": 1200,
         "image": "022.webp"
     },
     { 
         "name": "The Wicked Worm Beast",
         "number": "023",
-        "attack": 1380,
-        "defense": 1260,
+        "attack": 1400,
+        "defense": 700,
         "image": "023.webp"
     },
     { 
         "name": "Zombie Warrior",
         "number": "030",
-        "attack": 1120,
-        "defense": 1450,
+        "attack": 1200,
+        "defense": 900,
         "image": "030.webp"
     },
     { 
         "name": "Koumori Dragon",
         "number": "031",
-        "attack": 1890,
-        "defense": 1710,
+        "attack": 1500,
+        "defense": 1200,
         "image": "031.webp"
     },
     { 
         "name": "Judge Man",
         "number": "033",
-        "attack": 2280,
-        "defense": 2050,
+        "attack": 2200,
+        "defense": 1500,
         "image": "033.png"
     },
     { 
         "name": "The Snake Hair",
         "number": "036",
-        "attack": 1550,
-        "defense": 1380,
+        "attack": 1500,
+        "defense": 1200,
         "image": "036.webp"
     },
     { 
         "name": "Gaia The Dragon Champion",
         "number": "037",
-        "attack": 2640,
-        "defense": 2280,
+        "attack": 2600,
+        "defense": 2100,
         "image": "037.jpg"
     },
     { 
         "name": "Curse of Dragon",
         "number": "039",
-        "attack": 1820,
-        "defense": 1620,
+        "attack": 2000,
+        "defense": 1500,
         "image": "039.jpg"
     },
     { 
         "name": "Celtic Guardian",
         "number": "041",
-        "attack": 1360,
-        "defense": 1490,
+        "attack": 1400,
+        "defense": 1200,
         "image": "041.jpg"
     },
     { 
         "name": "Harpie Lady Sisters",
         "number": "063",
-        "attack": 2180,
-        "defense": 1850,
+        "attack": 1950,
+        "defense": 2100,
         "image": "063.jpg"
     },
     { 
         "name": "Tiger Axe",
         "number": "064",
-        "attack": 1510,
-        "defense": 1320,
+        "attack": 1300,
+        "defense": 1100,
         "image": "064.webp"
     },
     { 
