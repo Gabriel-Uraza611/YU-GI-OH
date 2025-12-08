@@ -3,151 +3,178 @@
         "name": "Mystical Elf",
         "number": "002",
         "attack": 1450,
-        "defense": 1820
+        "defense": 1820,
+        "image": "002.png",
+        "stars": 4
     },
     { 
         "name": "Baby Dragon",
         "number": "004",
         "attack": 1680,
-        "defense": 1350
+        "defense": 1350,
+        "image": "004.png",
+        "stars": 3
     },
     { 
         "name": "Shadow Specter",
         "number": "009",
         "attack": 950,
-        "defense": 1100
+        "defense": 1100,
+        "image": "009.webp"
     },
     { 
         "name": "Blackland Fire Dragon",
         "number": "010",
         "attack": 2150,
-        "defense": 1790
+        "defense": 1790,
+        "image": "010.webp"
     },
     { 
         "name": "Sword Arm of Dragon",
         "number": "011",
         "attack": 2480,
-        "defense": 2340
+        "defense": 2340,
+        "image": "011.png"
     },
     { 
         "name": "Flame Swordsman",
         "number": "015",
         "attack": 1620,
-        "defense": 1540
+        "defense": 1540,
+        "image": "015.webp"
     },
     { 
         "name": "Summoned Skull",
         "number": "022",
         "attack": 2050,
-        "defense": 1680
+        "defense": 1680,
+        "image": "022.webp"
     },
     { 
         "name": "The Wicked Worm Beast",
         "number": "023",
         "attack": 1380,
-        "defense": 1260
+        "defense": 1260,
+        "image": "023.webp"
     },
     { 
         "name": "Zombie Warrior",
         "number": "030",
         "attack": 1120,
-        "defense": 1450
+        "defense": 1450,
+        "image": "030.webp"
     },
     { 
         "name": "Koumori Dragon",
         "number": "031",
         "attack": 1890,
-        "defense": 1710
+        "defense": 1710,
+        "image": "031.webp"
     },
     { 
         "name": "Judge Man",
         "number": "033",
         "attack": 2280,
-        "defense": 2050
+        "defense": 2050,
+        "image": "033.png"
     },
     { 
         "name": "The Snake Hair",
         "number": "036",
         "attack": 1550,
-        "defense": 1380
+        "defense": 1380,
+        "image": "036.webp"
     },
     { 
         "name": "Gaia The Dragon Champion",
         "number": "037",
         "attack": 2640,
-        "defense": 2280
+        "defense": 2280,
+        "image": "037.jpg"
     },
     { 
         "name": "Curse of Dragon",
         "number": "039",
         "attack": 1820,
-        "defense": 1620
+        "defense": 1620,
+        "image": "039.jpg"
     },
     { 
         "name": "Celtic Guardian",
         "number": "041",
         "attack": 1360,
-        "defense": 1490
+        "defense": 1490,
+        "image": "041.jpg"
     },
     { 
         "name": "Harpie Lady Sisters",
         "number": "063",
         "attack": 2180,
-        "defense": 1850
+        "defense": 1850,
+        "image": "063.jpg"
     },
     { 
         "name": "Tiger Axe",
         "number": "064",
         "attack": 1510,
-        "defense": 1320
+        "defense": 1320,
+        "image": "064.webp"
     },
     { 
         "name": "Thousand Dragon",
         "number": "069",
         "attack": 2520,
-        "defense": 2160
+        "defense": 2160,
+        "image": "069.webp"
     },
     { 
         "name": "Cocoon of Evolution",
         "number": "072",
         "attack": 1240,
-        "defense": 1580
+        "defense": 1580,
+        "image": "072.webp"
     },
     { 
         "name": "Kairyu-Shin",
         "number": "073",
         "attack": 2380,
-        "defense": 2040
+        "defense": 2040,
+        "image": "073.jpg"
     },
     { 
         "name": "Red Eyes B. Dragon",
         "number": "082",
         "attack": 2750,
-        "defense": 2420
+        "defense": 2420,
+        "image": "082.jpg"
     },
     { 
         "name": "Reaper of the Cards",
         "number": "084",
         "attack": 1680,
-        "defense": 1450
+        "defense": 1450,
+        "image": "084.png"
     },
     { 
         "name": "Rabid Horseman",
         "number": "092",
         "attack": 1420,
-        "defense": 1260
+        "defense": 1260,
+        "image": "092.jpg"
     },
     { 
         "name": "Armored Zombie",
         "number": "096",
         "attack": 1890,
-        "defense": 1720
+        "defense": 1720,
+        "image": "096.webp"
     },
     { 
         "name": "Dragon Zombie",
         "number": "097",
         "attack": 2140,
-        "defense": 1880
+        "defense": 1880,
+        "image": "097.webp"
     },
     { 
         "name": "Dancing Elf",
@@ -306,7 +333,7 @@
         "defense": 1360
     },
     { 
-        "name": "Elegant Egoist",
+        "name": "Elegant Egoist OJO MAGICA",
         "number": "318",
         "attack": 1480,
         "defense": 1240
@@ -336,7 +363,7 @@
         "defense": 1480
     },
     { 
-        "name": "Final Flame",
+        "name": "Final Flame OJO MAGICA",
         "number": "345",
         "attack": 2480,
         "defense": 2120
@@ -348,7 +375,7 @@
         "defense": 1380
     },
     { 
-        "name": "Invinsible Wire",
+        "name": "Invinsible Wire OJO TRAMPA",
         "number": "684",
         "attack": 2320,
         "defense": 2020
@@ -360,10 +387,10 @@
         "defense": 1260
     },
     { 
-        "name": "Widespread Ruin",
+        "name": "Widespread Ruin OJO TRAMPA",
         "number": "686",
         "attack": 2680,
-        "defense": 2380
+        "defense": 2380 
     },
     { 
         "name": "Monster Eye",
