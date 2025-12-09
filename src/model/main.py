@@ -104,7 +104,7 @@ def main():
     )
 
     # 4. Inicializar el controlador de la IA
-    ai_controller = AIController(max_depth=3) 
+    ai_controller = AIController(depth=3) 
     
     # 5. Inicializar y lanzar el CONTROLADOR de Pygame
     print("\n\n######################################")
@@ -118,17 +118,4 @@ def main():
     game_controller.run() # Inicia el bucle principal de Pygame
 
 if __name__ == '__main__':
-    # Se añade un placeholder para AIController si aún no está implementado
-    class AIController:
-        def __init__(self, max_depth):
-            print(f"AIController placeholder inicializado con profundidad {max_depth}.")
-        def execute_ai_turn(self, state: GameState) -> GameState:
-            print("IA: Robando carta y pasando turno.")
-            # Simplemente roba una carta y pasa para mantener el flujo de la simulación
-            new_ai_player, _ = state.ai_player.draw_card()
-            new_state = state.get_copy_with_players(state.player, new_ai_player)
-            # El movimiento de PASS cambia la fase/turno
-            pass_move = Move(action_type=ActionType.PASS, target_zone='turn')
-            return new_state.apply_move(pass_move)
-    
     main()
