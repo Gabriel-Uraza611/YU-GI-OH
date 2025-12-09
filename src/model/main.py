@@ -123,7 +123,7 @@ if __name__ == '__main__':
         def __init__(self, max_depth):
             print(f"AIController placeholder inicializado con profundidad {max_depth}.")
         def execute_ai_turn(self, state: GameState) -> GameState:
-            print("IA: Robando carta y pasando turno (lógica real no implementada).")
+            print("IA: Robando carta y pasando turno.")
             # Simplemente roba una carta y pasa para mantener el flujo de la simulación
             new_ai_player, _ = state.ai_player.draw_card()
             new_state = state.get_copy_with_players(state.player, new_ai_player)
