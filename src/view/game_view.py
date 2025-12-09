@@ -64,12 +64,12 @@ class GameView:
         
         # 2. Dibujar zonas y cartas del Oponente (IA) - deck y cementerio, y su mano visible
         self._draw_player_areas(game_state.ai_player, False, (SCREEN_HEIGHT // 2) - SLOT_SIZE - 20)
-        self._draw_monster_slots(game_state.ai_player.field.monsters, False)
+        self._draw_monster_slots(game_state.ai_player.field.monsters, False, game_state)
         self._draw_hand(game_state.ai_player.hand.cards, False)
         
         # 3. Dibujar zonas y cartas del Jugador - deck, cementerio y mano
         self._draw_player_areas(game_state.player, True, (SCREEN_HEIGHT // 2) + 20)
-        self._draw_monster_slots(game_state.player.field.monsters, True)
+        self._draw_monster_slots(game_state.player.field.monsters, True, game_state)
         self._draw_hand(game_state.player.hand.cards, True)
         
         # 4. Dibujar panel de LP (arriba, pequeño)
@@ -136,6 +136,30 @@ class GameView:
                     pygame.draw.rect(self.screen, (90, 90, 110), graveyard_rect, border_radius=5)
         except Exception:
             pass
+        # Mostrar carta superior del deck
+        try:
+            if player.deck:
+                top_card = player.deck[0]
+
+                mini_card_size = (CARD_WIDTH - 20, CARD_HEIGHT - 20)
+                img = self._load_card_image(top_card.image, mini_card_size)
+                
+                if img:
+                    img_x = deck_x + 10
+                    img_y = deck_y + 10
+                    self.screen.blit(img, (img_x, img_y))
+                else:
+                    pygame.draw.rect(self.screen, (255, 255, 255), deck_rect, 1, border_radius=5)
+
+                if deck_y < SCREEN_HEIGHT // 2:
+                    text_y = deck_y - 20
+                else:
+                    text_y = deck_y + CARD_HEIGHT + 15
+
+                deck_count = self.font_small.render(f"Deck: {len(player.deck)}", True, (255, 255, 255))
+                self.screen.blit(deck_count, (deck_x, text_y))
+        except Exception:
+            pass
 
         # Si el cementerio está en la mitad superior, mover texto ARRIBA del rectángulo
         if graveyard_y < SCREEN_HEIGHT // 2:
@@ -148,7 +172,7 @@ class GameView:
 
 
 
-    def _draw_monster_slots(self, monsters: Tuple[Tuple[Card, Position] | None, ...], is_player: bool):
+    def _draw_monster_slots(self, monsters: Tuple[Tuple[Card, Position] | None, ...], is_player: bool, game_state: GameState):
         """
         Dibuja los slots de monstruos y las cartas en ellos.
         """
@@ -182,7 +206,7 @@ class GameView:
                 self.screen.blit(text_surface, (x + 5, y_row + 5))
 
                 # Puedes indicar visualmente si ya atacó (por ejemplo, atenuar)
-                if has_attacked:
+                if has_attacked and game_state.phase.upper() == 'BATTLE_PHASE':
                     # dibujar overlay sutil para indicar que ya atacó
                     overlay = pygame.Surface((card_rect.width, card_rect.height), pygame.SRCALPHA)
                     overlay.fill((0, 0, 0, 100))
@@ -317,7 +341,6 @@ class GameView:
 
     def get_pass_button_rect(self) -> pygame.Rect:
         """Devuelve el rectángulo del botón PASS para la detección de clics."""
-        # Se asume que este método es llamado DESPUÉS de _draw_info_panel
         return getattr(self, 'pass_button_rect', pygame.Rect(0, 0, 0, 0))
     
     def get_hand_card_rects(self, hand_cards, is_player: bool):
@@ -364,3 +387,181 @@ class GameView:
             rects.append(rect)
         
         return rects
+    def draw_tribute_error_message(self, screen: pygame.Surface, title: str, message: str) -> pygame.Rect:
+        """
+        Dibuja un mensaje de error modal con un botón 'CERRAR' y retorna el Rect del botón.
+        """
+        
+        # 1. Configuración de dimensiones
+        dialog_width, dialog_height = 500, 250
+        x = (SCREEN_WIDTH - dialog_width) // 2
+        y = (SCREEN_HEIGHT - dialog_height) // 2
+        dialog_rect = pygame.Rect(x, y, dialog_width, dialog_height)
+        
+        # 2. Fondo y borde (superficie para transparencia y bloqueo)
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150)) # Fondo semitransparente oscuro
+        screen.blit(overlay, (0, 0))
+
+        pygame.draw.rect(screen, (50, 50, 50), dialog_rect, border_radius=15)
+        pygame.draw.rect(screen, (255, 50, 50), dialog_rect, 5, border_radius=15) # Borde de error rojo
+        
+        # 3. Fuentes
+        font_title = pygame.font.SysFont('Arial', 32, bold=True)
+        font_msg = pygame.font.SysFont('Arial', 20)
+        font_btn = pygame.font.SysFont('Arial', 20, bold=True)
+        
+        # 4. Título
+        title_surf = font_title.render(title, True, (255, 255, 255))
+        screen.blit(title_surf, title_surf.get_rect(center=(dialog_rect.centerx, dialog_rect.top + 30)))
+        
+        # 5. Mensaje de error
+        y_offset = dialog_rect.top + 90
+        # Dibujar mensaje, intentando manejar líneas si es necesario
+        lines = message.split('\n')
+        for line in lines:
+            msg_surf = font_msg.render(line.strip(), True, (255, 255, 255))
+            screen.blit(msg_surf, msg_surf.get_rect(center=(dialog_rect.centerx, y_offset)))
+            y_offset += 25
+
+        # 6. Botón Cerrar
+        close_width, close_height = 120, 40
+        close_x = dialog_rect.centerx - (close_width // 2)
+        close_y = dialog_rect.bottom - close_height - 20
+        close_btn_rect = pygame.Rect(close_x, close_y, close_width, close_height)
+        
+        pygame.draw.rect(screen, (100, 100, 200), close_btn_rect, border_radius=10) # Fondo azul
+        close_text = font_btn.render("CERRAR", True, (255, 255, 255))
+        screen.blit(close_text, close_text.get_rect(center=close_btn_rect.center))
+        
+        return close_btn_rect # ¡CLAVE! Retorna el Rect para la detección del clic
+
+    def draw_already_summoned_message(self, screen: pygame.Surface) -> pygame.Rect:
+        """
+        Dibuja un mensaje modal de que ya se invocó una carta en esta Main Phase.
+        Retorna el Rect del botón CERRAR para detectar clics.
+        """
+        
+        # 1. Configuración de dimensiones
+        dialog_width, dialog_height = 450, 200
+        x = (SCREEN_WIDTH - dialog_width) // 2
+        y = (SCREEN_HEIGHT - dialog_height) // 2
+        dialog_rect = pygame.Rect(x, y, dialog_width, dialog_height)
+        
+        # 2. Fondo semitransparente
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))
+        screen.blit(overlay, (0, 0))
+
+        # 3. Fondo del diálogo
+        pygame.draw.rect(screen, (50, 30, 30), dialog_rect, border_radius=15)
+        pygame.draw.rect(screen, (200, 50, 50), dialog_rect, 5, border_radius=15)
+        
+        # 4. Fuentes
+        font_title = pygame.font.SysFont('Arial', 28, bold=True)
+        font_msg = pygame.font.SysFont('Arial', 18)
+        font_btn = pygame.font.SysFont('Arial', 18, bold=True)
+        
+        # 5. Título
+        title_surf = font_title.render("¡Ya invocaste una carta!", True, (255, 100, 100))
+        screen.blit(title_surf, title_surf.get_rect(center=(dialog_rect.centerx, dialog_rect.top + 30)))
+        
+        # 6. Mensaje
+        msg_surf = font_msg.render("Solo puedes invocar 1 carta por Main Phase", True, (200, 200, 200))
+        screen.blit(msg_surf, msg_surf.get_rect(center=(dialog_rect.centerx, dialog_rect.centery + 10)))
+
+        # 7. Botón Cerrar
+        close_width, close_height = 120, 40
+        close_x = dialog_rect.centerx - (close_width // 2)
+        close_y = dialog_rect.bottom - close_height - 20
+        close_btn_rect = pygame.Rect(close_x, close_y, close_width, close_height)
+        
+        pygame.draw.rect(screen, (100, 100, 200), close_btn_rect, border_radius=10)
+        close_text = font_btn.render("CERRAR", True, (255, 255, 255))
+        screen.blit(close_text, close_text.get_rect(center=close_btn_rect.center))
+        
+        return close_btn_rect
+
+    def draw_cannot_attack_message(self, screen: pygame.Surface) -> pygame.Rect:
+        """
+        Dibuja un mensaje modal de que no puedes atacar en la primera ronda.
+        Retorna el Rect del botón CERRAR para detectar clics.
+        """
+        
+        # 1. Configuración de dimensiones
+        dialog_width, dialog_height = 450, 200
+        x = (SCREEN_WIDTH - dialog_width) // 2
+        y = (SCREEN_HEIGHT - dialog_height) // 2
+        dialog_rect = pygame.Rect(x, y, dialog_width, dialog_height)
+        
+        # 2. Fondo semitransparente
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))
+        screen.blit(overlay, (0, 0))
+
+        # 3. Fondo del diálogo
+        pygame.draw.rect(screen, (40, 40, 40), dialog_rect, border_radius=15)
+        pygame.draw.rect(screen, (180, 100, 100), dialog_rect, 3, border_radius=15)
+        
+        # 4. Fuentes
+        font_title = pygame.font.SysFont('Arial', 28, bold=True)
+        font_msg = pygame.font.SysFont('Arial', 18)
+        font_btn = pygame.font.SysFont('Arial', 18, bold=True)
+        
+        # 5. Título
+        title_surf = font_title.render("No puedes atacar ahora", True, (255, 200, 100))
+        screen.blit(title_surf, title_surf.get_rect(center=(dialog_rect.centerx, dialog_rect.top + 30)))
+        
+        # 6. Mensaje
+        msg_surf = font_msg.render("No puedes atacar en la primera ronda.", True, (220, 220, 220))
+        screen.blit(msg_surf, msg_surf.get_rect(center=(dialog_rect.centerx, dialog_rect.centery + 10)))
+
+        # 7. Botón Cerrar
+        close_width, close_height = 120, 40
+        close_x = dialog_rect.centerx - (close_width // 2)
+        close_y = dialog_rect.bottom - close_height - 20
+        close_btn_rect = pygame.Rect(close_x, close_y, close_width, close_height)
+        
+        pygame.draw.rect(screen, (100, 120, 200), close_btn_rect, border_radius=10)
+        close_text = font_btn.render("CERRAR", True, (255, 255, 255))
+        screen.blit(close_text, close_text.get_rect(center=close_btn_rect.center))
+        
+        return close_btn_rect
+    
+    def draw_already_attacked_message(self, screen: pygame.Surface) -> pygame.Rect:
+        """Dibuja un mensaje modal indicando que el monstruo ya atacó en esta Battle Phase."""
+        dialog_width, dialog_height = 450, 200
+        x = (SCREEN_WIDTH - dialog_width) // 2
+        y = (SCREEN_HEIGHT - dialog_height) // 2
+        dialog_rect = pygame.Rect(x, y, dialog_width, dialog_height)
+
+        # Fondo semitransparente
+        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))
+        screen.blit(overlay, (0, 0))
+
+        # Fondo del diálogo
+        pygame.draw.rect(screen, (40, 40, 40), dialog_rect, border_radius=12)
+        pygame.draw.rect(screen, (200, 120, 80), dialog_rect, 3, border_radius=12)
+
+        # Fuentes
+        font_title = pygame.font.SysFont('Arial', 24, bold=True)
+        font_msg = pygame.font.SysFont('Arial', 16)
+        font_btn = pygame.font.SysFont('Arial', 16, bold=True)
+
+        title_surf = font_title.render("Monstruo ya atacó", True, (255, 180, 80))
+        screen.blit(title_surf, title_surf.get_rect(center=(dialog_rect.centerx, dialog_rect.top + 30)))
+
+        msg_surf = font_msg.render("Este monstruo ya realizó un ataque en esta Battle Phase.", True, (230, 230, 230))
+        screen.blit(msg_surf, msg_surf.get_rect(center=(dialog_rect.centerx, dialog_rect.centery)))
+
+        # Botón CERRAR
+        close_width, close_height = 120, 40
+        close_x = dialog_rect.centerx - (close_width // 2)
+        close_y = dialog_rect.bottom - close_height - 20
+        close_btn_rect = pygame.Rect(close_x, close_y, close_width, close_height)
+        pygame.draw.rect(screen, (100, 120, 200), close_btn_rect, border_radius=8)
+        close_text = font_btn.render("CERRAR", True, (255, 255, 255))
+        screen.blit(close_text, close_text.get_rect(center=close_btn_rect.center))
+
+        return close_btn_rect

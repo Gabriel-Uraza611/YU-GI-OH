@@ -6,6 +6,7 @@ from model.cards.card import Card
 from model.fusions.fusion_recipe import FusionRecipe, get_fusion_result
 from .player import Player
 from .move import Move, ActionType, Position
+from model.cards.deck import random_deck
 
 # Constante para MiniMax (se asume que existe en un módulo ai/minimax o se define aquí)
 INF = float('inf') 
@@ -364,6 +365,8 @@ class GameState:
                     # 4. Actualizar jugador con nuevo Hand y Field
                     acting_p = acting_p.get_copy_with_hand(new_hand)
                     acting_p = acting_p.get_copy_with_field(new_field)
+                    # 5. MARCAR: Fusion Summon también cuenta como la invocación normal del turno
+                    acting_p = acting_p.get_copy_with_summon_used(True)
 
                 elif move.action_type == ActionType.CHANGE_POSITION:
                     if move.source_index is None or move.position is None: return self
@@ -477,3 +480,26 @@ class GameState:
     def get_copy_with_players(self, player: Player, ai_player: Player) -> 'GameState':
         """Retorna una copia del GameState con los jugadores provistos (inmutable)."""
         return replace(self, player=player, ai_player=ai_player)
+    
+    def reinitialize_decks(self, deck_size: int) -> 'GameState':
+        """
+        Crea y baraja nuevos decks de tamaño 'deck_size' para ambos jugadores
+        utilizando la función random_deck (que garantiza la aleatoriedad).
+        """
+        
+        # 1. Crear el mazo del jugador (aleatorio y de tamaño 'deck_size')
+        new_player_deck_list = random_deck(self.all_cards, deck_size)
+        
+        # 2. Crear el mazo de la IA (aleatorio y de tamaño 'deck_size')
+        new_ai_deck_list = random_deck(self.all_cards, deck_size)
+        
+        # Convertir a tupla, ya que el Player lo requiere
+        new_player_deck = tuple(new_player_deck_list)
+        new_ai_deck = tuple(new_ai_deck_list)
+
+        # 3. Crear los nuevos objetos Player inmutables
+        new_player = self.player.get_copy_with_new_deck(new_player_deck)
+        new_ai_player = self.ai_player.get_copy_with_new_deck(new_ai_deck)
+
+        # 4. Retornar el GameState actualizado
+        return replace(self, player=new_player, ai_player=new_ai_player)

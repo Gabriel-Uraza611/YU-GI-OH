@@ -56,25 +56,17 @@ def initialize_players(all_cards: Dict[str, Card]) -> Tuple[Player, Player]:
     """
     print("\n--- 2. Inicializando Jugadores y Mazos ---")
     
-    # Crear mazos y convertir a listas
-    player_deck_list = list(random_deck(all_cards))
-    ai_deck_list = list(random_deck(all_cards))
+    DEFAULT_DECK_SIZE = 40 
     
-    # Repartir mano inicial (5 cartas)
-    HAND_SIZE = 5
+    player_deck_list = random_deck(all_cards, deck_size=DEFAULT_DECK_SIZE)
+    ai_deck_list = random_deck(all_cards, deck_size=DEFAULT_DECK_SIZE)
     
-    player_hand = Hand(cards=tuple(player_deck_list[:HAND_SIZE]))
-    player_deck_tuple = tuple(player_deck_list[HAND_SIZE:]) 
-    
-    ai_hand = Hand(cards=tuple(ai_deck_list[:HAND_SIZE]))
-    ai_deck_tuple = tuple(ai_deck_list[HAND_SIZE:]) 
 
-    # Crear instancias de Player
-    player = Player(name="Player 1", hand=player_hand, deck=player_deck_tuple)
-    ai_player = Player(name="AI Opponent", hand=ai_hand, deck=ai_deck_tuple)
+    player_deck_tuple = tuple(player_deck_list)
+    ai_deck_tuple = tuple(ai_deck_list) 
 
-    print(f"Jugador: {player}")
-    print(f"IA: {ai_player}")
+    player = Player(name="Player 1", deck=player_deck_tuple)
+    ai_player = Player(name="AI Opponent", deck=ai_deck_tuple)
     
     return player, ai_player
 

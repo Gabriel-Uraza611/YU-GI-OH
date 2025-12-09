@@ -73,3 +73,23 @@ class Player:
         """Retorna un nuevo Player actualizando el flag de invocación."""
         # Se usa 'not used' para indicar si la próxima invocación *está disponible*
         return replace(self, can_normal_summon=not used)
+    def get_copy_with_new_deck(self, new_deck: Tuple[Card, ...]) -> 'Player':
+        """Retorna un nuevo Player con el deck actualizado."""
+        return replace(self, deck=new_deck)
+
+    def draw_starting_hand(self) -> Tuple['Player', List[Card]]:
+        """Roba las 5 primeras cartas para la mano inicial."""
+        if len(self.deck) < 5:
+            num_to_draw = len(self.deck)
+        else:
+            num_to_draw = 5
+
+        drawn_cards: List[Card] = list(self.deck[:num_to_draw])
+        new_deck: Tuple[Card, ...] = self.deck[num_to_draw:]
+        
+        new_hand = self.hand
+        for card in drawn_cards:
+            new_hand = new_hand.add_card(card)
+
+        # Retorna el estado del jugador después del robo y las cartas robadas
+        return replace(self, deck=new_deck, hand=new_hand), drawn_cards
