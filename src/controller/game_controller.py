@@ -1,12 +1,11 @@
 import pygame
-import sys
 from typing import Optional, List, Tuple
 from dataclasses import replace
 # Importaciones del Model
 from model.game.gamestate import GameState
 from model.game.move import Move, ActionType, Position
-from model.game.player import Player
-from model.cards.card import Card
+
+
 
 # Importación de la Vista
 from view.game_view import GameView, SCREEN_WIDTH, SCREEN_HEIGHT

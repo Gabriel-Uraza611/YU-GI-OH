@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple
 
 # --- Importaciones de dependencias ---
 from model.cards.card import Card 

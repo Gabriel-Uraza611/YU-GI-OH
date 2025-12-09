@@ -1,7 +1,6 @@
 import os
 import sys
-import random
-from typing import Dict, List, Any, Tuple
+from typing import Dict, List, Tuple
 
 # Agregar src al path para que los imports funcionen desde cualquier lugar
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))

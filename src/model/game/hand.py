@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional
+from typing import Tuple, Optional
 from model.cards.card import Card
 from dataclasses import dataclass, replace, field
 

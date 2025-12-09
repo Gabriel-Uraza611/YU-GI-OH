@@ -1,4 +1,3 @@
-from typing import Tuple, Optional, List
 from model.game.gamestate import GameState
 from model.game.move import Move, ActionType
 from model.ai.minimax import find_best_move

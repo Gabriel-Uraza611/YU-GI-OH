@@ -1,4 +1,4 @@
-from typing import Tuple, Optional
+from typing import  Optional
 from model.game.gamestate import GameState
 from model.game.move import Move
 

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field, replace
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Tuple
 
 # Importaciones de los componentes modulares
 from model.cards.card import Card
